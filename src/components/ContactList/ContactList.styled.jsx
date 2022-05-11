@@ -1,12 +1,9 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-    width: 350px;
-`
+    width: 400px;
+`;
 
-export const Item = styled.li`
-    display: flex;
-    justify-content: space-between;
-    text-align: center;
-    margin-bottom: 10px;
+export const Text = styled.p`
+    font-weight: 500;
 `;

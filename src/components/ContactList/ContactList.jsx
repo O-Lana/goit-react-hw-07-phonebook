@@ -1,30 +1,35 @@
-// import PropTypes from 'prop-types';
-import { useSelector, useDispatch } from 'react-redux';
-import { removeContact, getContacts } from 'redux/itemsSlice';
+import { useSelector } from 'react-redux';
+import { useGetContactsQuery } from "redux/contactsApi";
 import { getFilterValue } from 'redux/filterSlice';
-import { Container, Item } from './ContactList.styled';
+import { ContactListItem } from 'components/ContactListItem/ContactListItem';
+import { Container, Text } from './ContactList.styled';
 
 export const ContactList = () => {
-    const contacts = useSelector(getContacts);
-    const filter = useSelector(getFilterValue);
-    const dispatch = useDispatch();
+    const { data = [], error, isLoading } = useGetContactsQuery();
 
-        const normalizedFilter = filter.toLowerCase();
-    
-        const filteredContacts = contacts.filter((contact) =>
-          contact.name.toLowerCase().includes(normalizedFilter)
-        );
+    const contacts = data;
+
+    const filter = useSelector(getFilterValue);
+    const normalizedFilter = filter.toLowerCase();
+    const filteredContacts = contacts.filter((contact) =>
+        contact.name.toLowerCase().includes(normalizedFilter)
+    );
 
     return (
         <Container>
-            <ul>
-                {filteredContacts.map(({ id, name, number }) => (
-                    <Item key={id}>
-                        {name}: {number}
-                        <button type="button" onClick={() => dispatch(removeContact(id))}>Delete</button>
-                    </Item>
-                ))}
+            {isLoading && <p>Loading...</p>}
+            {!isLoading && contacts.length === 0 && <Text>Your phonebook is empty!</Text>}
+
+            {error && contacts?.length > 0 && (
+                <Text>Something went wrong. Please refresh the page</Text>
+            )}
+            {contacts?.length > 0 && !error &&
+                <ul>
+                    {filteredContacts.map((contact) => (
+                        <ContactListItem key={contact.id} {...contact} />
+                    ))}
                 </ul>
+            }
         </Container>
     );
 };

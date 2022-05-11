@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { filterContacts, getFilterValue } from 'redux/filterSlice';
 import { Label, Input } from './Filter.styled';
 
-
 export const Filter = () => {
     const value = useSelector(getFilterValue);
     const dispatch = useDispatch();
@@ -20,4 +19,4 @@ export const Filter = () => {
             </Label>
         </div>
     );
-}
+};
